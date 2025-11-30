@@ -1,0 +1,2588 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ÁNH DU - Menu Navigation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .menu-item {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .menu-item::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #EAB308;
+            transition: width 0.3s ease;
+        }
+
+        .menu-item:hover::after,
+        .menu-item.active::after {
+            width: 100%;
+        }
+
+        .menu-item:hover {
+            color: #EAB308;
+        }
+
+        .menu-item.active {
+            color: #EAB308;
+        }
+
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+
+        .hamburger span {
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.open span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.open span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeInUp {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .carousel-slide {
+            transition: opacity 700ms ease-in-out;
+        }
+
+        .carousel-dot.active {
+            width: 2rem;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+    <!-- Navigation Bar -->
+    <nav class="bg-black text-white sticky top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='none' stroke='%23EAB308' stroke-width='3'/%3E%3Cpath d='M35 50 L45 35 L50 40 L55 30 L60 45 L65 40' fill='none' stroke='%23EAB308' stroke-width='2'/%3E%3Ccircle cx='45' cy='60' r='8' fill='none' stroke='%23EAB308' stroke-width='2'/%3E%3Ccircle cx='65' cy='65' r='10' fill='none' stroke='%23EAB308' stroke-width='2'/%3E%3C/svg%3E"
+                        alt="ÁNH DU Logo" class="h-12 w-12">
+                    <span class="text-2xl font-bold text-yellow-500">ÁNH DU</span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center space-x-8">
+                    <a href="/" class="menu-item text-sm font-semibold text-yellow-500 active">Thuê xe
+                        máy</a>
+                    <a href="dia-diem.html" class="menu-item text-sm font-semibold text-white">Tour xe máy</a>
+                    <a href="bang-gia.html" class="menu-item text-sm font-semibold text-white">Bảng giá</a>
+                    <a href="ve-chung-toi.html" class="menu-item text-sm font-semibold text-white">Về chúng tôi</a>
+                    <a href="form.html" class="menu-item text-sm font-semibold text-white">Liên hệ</a>
+                </div>
+
+                <!-- Language Selector -->
+                <div class="hidden lg:flex items-center">
+                    <button
+                        class="px-4 py-2 border-2 border-yellow-500 text-yellow-500 rounded-md font-semibold hover:bg-yellow-500 hover:text-black transition-colors duration-300">
+                        VN
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button class="lg:hidden hamburger flex flex-col space-y-1.5" id="mobileMenuBtn">
+                    <span class="block w-6 h-0.5 bg-yellow-500"></span>
+                    <span class="block w-6 h-0.5 bg-yellow-500"></span>
+                    <span class="block w-6 h-0.5 bg-yellow-500"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu fixed top-0 left-0 w-64 h-full bg-black shadow-2xl lg:hidden z-50" id="mobileMenu">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-8">
+                    <span class="text-xl font-bold text-yellow-500">ÁNH DU</span>
+                    <button class="text-white" id="closeMobileMenu">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex flex-col space-y-4">
+                    <a href="#thue-xe-may" class="text-yellow-500 font-semibold py-2 border-b border-gray-800">Thuê xe
+                        máy</a>
+                    <a href="#tour-xe-may"
+                        class="text-white font-semibold py-2 border-b border-gray-800 hover:text-yellow-500 transition-colors">Tour
+                        xe máy</a>
+                    <a href="#bang-gia"
+                        class="text-white font-semibold py-2 border-b border-gray-800 hover:text-yellow-500 transition-colors">Bảng
+                        giá</a>
+                    <a href="#ve-chung-toi"
+                        class="text-white font-semibold py-2 border-b border-gray-800 hover:text-yellow-500 transition-colors">Về
+                        chúng tôi</a>
+                    <a href="#lien-he"
+                        class="text-white font-semibold py-2 border-b border-gray-800 hover:text-yellow-500 transition-colors">Liên
+                        hệ</a>
+                    <a href="#blog-du-lich"
+                        class="text-white font-semibold py-2 border-b border-gray-800 hover:text-yellow-500 transition-colors">Blog
+                        du lịch</a>
+                    <button
+                        class="mt-4 px-4 py-2 border-2 border-yellow-500 text-yellow-500 rounded-md font-semibold hover:bg-yellow-500 hover:text-black transition-colors">
+                        VN
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Carousel Banner -->
+    <div class="relative w-full h-[900px]  ">
+        <!-- Carousel Wrapper -->
+        <div class="carousel-container relative h-full">
+            <!-- Slide 1 -->
+            <div class="carousel-slide active absolute inset-0 transition-opacity">
+                <div class="relative h-full w-full">
+                    <div class="absolute inset-0 bg-gradient-to-r from-black/80 to-black/40"></div>
+                    <img src="image/banner_01.jpg"
+                        alt="Motorbike Adventure" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                            <div class="max-w-2xl">
+                                <h1 class="text-5xl md:text-6xl font-bold text-white mb-6 animate-fadeInUp">
+                                    Khám Phá Việt Nam<br />
+                                    <span class="text-yellow-500">Trên Yên Xe</span>
+                                </h1>
+                                <p class="text-xl text-gray-200 mb-8 animate-fadeInUp" style="animation-delay: 0.2s">
+                                    Thuê xe máy chất lượng cao, trải nghiệm hành trình tự do
+                                </p>
+                                <div class="flex space-x-4 animate-fadeInUp" style="animation-delay: 0.4s">
+                                    <button
+                                        class="px-8 py-3 bg-yellow-500 text-black font-semibold rounded-lg hover:bg-yellow-400 transition-colors">
+                                        Thuê xe ngay
+                                    </button>
+                                    <button
+                                        class="px-8 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-black transition-colors">
+                                        Xem tour
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="carousel-slide absolute inset-0 transition-opacity duration-700 opacity-0">
+                <div class="relative h-full w-full">
+                    <div class="absolute inset-0 bg-gradient-to-r from-black/80 to-black/40"></div>
+                    <img src="image/banner_02.webp"
+                        alt="Mountain Roads" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                            <div class="max-w-2xl">
+                                <h1 class="text-5xl md:text-6xl font-bold text-white mb-6">
+                                    Tour Phượt<br />
+                                    <span class="text-yellow-500">Chuyên Nghiệp</span>
+                                </h1>
+                                <p class="text-xl text-gray-200 mb-8">
+                                    Hành trình được thiết kế đặc biệt cho những người đam mê khám phá
+                                </p>
+                                <div class="flex space-x-4">
+                                    <button
+                                        class="px-8 py-3 bg-yellow-500 text-black font-semibold rounded-lg hover:bg-yellow-400 transition-colors">
+                                        Khám phá tour
+                                    </button>
+                                    <button
+                                        class="px-8 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-black transition-colors">
+                                        Liên hệ
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="carousel-slide absolute inset-0 transition-opacity duration-700 opacity-0">
+                <div class="relative h-full w-full">
+                    <div class="absolute inset-0 bg-gradient-to-r from-black/80 to-black/40"></div>
+                    <img src="image/banner_03.webp"
+                        alt="City Ride" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                            <div class="max-w-2xl">
+                                <h1 class="text-5xl md:text-6xl font-bold text-white mb-6">
+                                    Xe Đa Dạng<br />
+                                    <span class="text-yellow-500">Giá Tốt Nhất</span>
+                                </h1>
+                                <p class="text-xl text-gray-200 mb-8">
+                                    Từ xe số đến xe tay ga, phù hợp với mọi nhu cầu của bạn
+                                </p>
+                                <div class="flex space-x-4">
+                                    <button
+                                        class="px-8 py-3 bg-yellow-500 text-black font-semibold rounded-lg hover:bg-yellow-400 transition-colors">
+                                        Xem bảng giá
+                                    </button>
+                                    <button
+                                        class="px-8 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-black transition-colors">
+                                        Về chúng tôi
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Arrows -->
+        <button
+            class="carousel-prev absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-yellow-500 text-white p-3 rounded-full transition-colors z-10">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+        </button>
+        <button
+            class="carousel-next absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-yellow-500 text-white p-3 rounded-full transition-colors z-10">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+        </button>
+
+        <!-- Dots Indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-3 z-10">
+            <button class="carousel-dot active w-3 h-3 rounded-full bg-yellow-500 transition-all"
+                data-slide="0"></button>
+            <button class="carousel-dot w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-all"
+                data-slide="1"></button>
+            <button class="carousel-dot w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-all"
+                data-slide="2"></button>
+        </div>
+    </div>
+
+    <!-- Demo Content -->
+    <!-- Top Destinations Section -->
+    <section class="bg-gradient-to-b from-black to-gray-900 py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Header -->
+            <div class="flex justify-between items-end mb-12">
+                <div>
+                    <p class="text-gray-400 text-sm mb-2">Hành trình nghỉ dưỡng đẳng cấp</p>
+                    <h2
+                        class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-green-600">
+                        Top điểm đến bậc nhất tại Phan Thiết
+                    </h2>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-green-400 text-2xl font-bold">+50</span>
+                    <span class="text-gray-400">Địa điểm nên đến</span>
+                    <div class="flex space-x-2 ml-4">
+                        <button
+                            class="destinations-prev w-12 h-12 rounded-full border-2 border-gray-600 text-gray-400 hover:border-green-500 hover:text-green-500 transition-all flex items-center justify-center">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                        </button>
+                        <button
+                            class="destinations-next w-12 h-12 rounded-full border-2 border-gray-600 text-gray-400 hover:border-green-500 hover:text-green-500 transition-all flex items-center justify-center">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+                                </path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Destinations Carousel -->
+            <div class="relative overflow-hidden">
+                <div class="destinations-container flex transition-transform duration-500 ease-out">
+                    <!-- Card 1 -->
+                    <div class="destination-card min-w-full md:min-w-[calc(50%-12px)] lg:min-w-[calc(25%-18px)] px-2">
+                        <div class="relative h-[500px] rounded-2xl overflow-hidden group cursor-pointer">
+                            <img src="image/muine.jpg"
+                                alt="Mũi Né Beach"
+                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent">
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                                <div class="text-4xl font-bold mb-3">Top 1</div>
+                                <h3 class="text-xl font-bold mb-2">Mũi Né Beach</h3>
+                                <p class="text-gray-300 text-sm">Thiên đường biển xanh cát trắng, nơi lý tưởng</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="destination-card min-w-full md:min-w-[calc(50%-12px)] lg:min-w-[calc(25%-18px)] px-2">
+                        <div class="relative h-[500px] rounded-2xl overflow-hidden group cursor-pointer">
+                            <img src="image/anhdu.jpg"
+                                alt="Đồi Cát Bay"
+                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent">
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                                <div class="text-4xl font-bold mb-3">Ánh Du</div>
+                                <h3 class="text-xl font-bold mb-2">Anh Chủ Thuê Xe</h3>
+                                <p class="text-gray-300 text-sm">Siêu thân thiện với khách</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="destination-card min-w-full md:min-w-[calc(50%-12px)] lg:min-w-[calc(25%-18px)] px-2">
+                        <div class="relative h-[500px] rounded-2xl overflow-hidden group cursor-pointer">
+                            <img src="image/fika.webp"
+                                alt="Làng Chài Mũi Né"
+                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent">
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                                <div class="text-4xl font-bold mb-3">Cào Cào</div>
+                                <h3 class="text-xl font-bold mb-2">Quán cà phê local</h3>
+                                <p class="text-gray-300 text-sm">Ngon bổ rẻ và chill !</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="destination-card min-w-full md:min-w-[calc(50%-12px)] lg:min-w-[calc(25%-18px)] px-2">
+                        <div class="relative h-[500px] rounded-2xl overflow-hidden group cursor-pointer">
+                            <img src="image/fikacaocao.webp"
+                                alt="Tháp Chàm Pô Sah Inư"
+                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent">
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                                <div class="text-4xl font-bold mb-3">Fika Cào Cào</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 5 -->
+                    <div class="destination-card min-w-full md:min-w-[calc(50%-12px)] lg:min-w-[calc(25%-18px)] px-2">
+                        <div class="relative h-[500px] rounded-2xl overflow-hidden group cursor-pointer">
+                            <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&h=1000&fit=crop"
+                                alt="Suối Tiên"
+                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent">
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                                <div class="text-4xl font-bold mb-3">5st place</div>
+                                <h3 class="text-xl font-bold mb-2">Suối Tiên</h3>
+                                <p class="text-gray-300 text-sm">Dòng suối trong xanh giữa cát đỏ kỳ ảo</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Motorbike Rental Section -->
+    <section id="thue-xe-may" class="bg-black py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Header -->
+            <div class="text-center mb-12">
+                <h2
+                    class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-green-600 mb-4">
+                    Danh mục xe máy
+                </h2>
+                <p class="text-gray-300 text-lg">
+                    Xe MOTOGO luôn mới 100%, chính chủ và được bảo dưỡng kỹ sau mỗi chuyến thuê
+                </p>
+            </div>
+
+            <!-- Motorbike Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <!-- Featured Bike Card -->
+                <div
+                    class="relative w-full max-w-sm bg-[#1a1a1a] rounded-2xl overflow-hidden border border-lime-500 shadow-2xl shadow-lime-500/20 group font-sans">
+
+                    <div class="absolute top-3 left-3 z-10">
+                        <div
+                            class="bg-yellow-400 text-black px-3 py-1.5 rounded-lg font-bold text-xs flex items-center space-x-1 shadow-md">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z">
+                                </path>
+                            </svg>
+                            <span>Lựa chọn tốt nhất</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-8 pb-2 flex justify-center">
+                        <div
+                            class="w-48 h-48 rounded-full border-4 border-lime-500/50 overflow-hidden shadow-lg bg-gray-800 relative">
+                            <img src="image/caocao.jpg"
+                                alt="Cào Cào Ánh Du"
+                                class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110">
+                        </div>
+                    </div>
+
+                    <div class="px-4 pb-4">
+
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="text-xl font-bold text-lime-400">Cào Cào Ánh Du</h3>
+                            <div class="flex items-center space-x-1 bg-gray-800 px-2 py-0.5 rounded-full">
+                                <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                    </path>
+                                </svg>
+                                <span class="text-white text-sm font-bold">4.5</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="text-2xl font-bold text-white">500.000 <span
+                                    class="text-sm font-normal text-gray-400">đ/ngày</span></div>
+                        </div>
+
+                        <div class="space-y-1 mb-4">
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                02 mũ bảo hiểm 1/2 đầu
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                02 áo mưa dùng 1 lần
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Giá đỡ điện thoại
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Dịch vụ cứu hộ
+                            </div>
+                        </div>
+
+                        <button
+                            class="w-full bg-lime-500 hover:bg-lime-400 text-black font-bold py-2.5 rounded-lg transition-colors shadow-lg text-sm uppercase tracking-wide">
+                            Gọi đặt xe
+                        </button>
+                    </div>
+                </div>
+                <div
+                    class="relative w-full max-w-sm bg-[#1a1a1a] rounded-2xl overflow-hidden border border-lime-500 shadow-2xl shadow-lime-500/20 group font-sans">
+
+                    <div class="absolute top-3 left-3 z-10">
+                        <div
+                            class="bg-yellow-400 text-black px-3 py-1.5 rounded-lg font-bold text-xs flex items-center space-x-1 shadow-md">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="pt-8 pb-2 flex justify-center">
+                        <a href="chi-tiet.html" 
+                           class="block group w-48 h-48 rounded-full border-4 border-lime-500/50 overflow-hidden shadow-lg bg-gray-800 relative cursor-pointer">
+                            
+                            <img src="image/tayga.jpg"
+                                 alt="Tay Ga Ánh Du"
+                                 class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110">
+                                 
+                        </a>
+                    </div>
+
+                    <div class="px-4 pb-4">
+
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="text-xl font-bold text-lime-400">Tay Ga Các Loại</h3>
+                            <div class="flex items-center space-x-1 bg-gray-800 px-2 py-0.5 rounded-full">
+                                <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                    </path>
+                                </svg>
+                                <span class="text-white text-sm font-bold">4.5</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="text-2xl font-bold text-white">150.000 <span
+                                    class="text-sm font-normal text-gray-400">đ/ngày</span></div>
+                        </div>
+
+                        <div class="space-y-1 mb-4">
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                02 mũ bảo hiểm 1/2 đầu
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                02 áo mưa dùng 1 lần
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Giá đỡ điện thoại
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Dịch vụ cứu hộ
+                            </div>
+                        </div>
+
+                        <button
+                            class="w-full bg-lime-500 hover:bg-lime-400 text-black font-bold py-2.5 rounded-lg transition-colors shadow-lg text-sm uppercase tracking-wide">
+                            Gọi đặt xe
+                        </button>
+                    </div>
+                </div>
+                <div
+                    class="relative w-full max-w-sm bg-[#1a1a1a] rounded-2xl overflow-hidden border border-lime-500 shadow-2xl shadow-lime-500/20 group font-sans">
+
+                    <div class="absolute top-3 left-3 z-10">
+                        <div
+                            class="bg-yellow-400 text-black px-3 py-1.5 rounded-lg font-bold text-xs flex items-center space-x-1 shadow-md">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="pt-8 pb-2 flex justify-center">
+                        <div
+                            class="w-48 h-48 rounded-full border-4 border-lime-500/50 overflow-hidden shadow-lg bg-gray-800 relative">
+                            <img src="image/vespa.jpg"
+                                alt="Vespa Ánh Du"
+                                class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110">
+                        </div>
+                    </div>
+
+                    <div class="px-4 pb-4">
+
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="text-xl font-bold text-lime-400">Vespa Ánh Du</h3>
+                            <div class="flex items-center space-x-1 bg-gray-800 px-2 py-0.5 rounded-full">
+                                <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                    </path>
+                                </svg>
+                                <span class="text-white text-sm font-bold">4.5</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="text-2xl font-bold text-white">230.000 <span
+                                    class="text-sm font-normal text-gray-400">đ/ngày</span></div>
+                        </div>
+
+                        <div class="space-y-1 mb-4">
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                02 mũ bảo hiểm 1/2 đầu
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                02 áo mưa dùng 1 lần
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Giá đỡ điện thoại
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Dịch vụ cứu hộ
+                            </div>
+                        </div>
+
+                        <button
+                            class="w-full bg-lime-500 hover:bg-lime-400 text-black font-bold py-2.5 rounded-lg transition-colors shadow-lg text-sm uppercase tracking-wide">
+                            Gọi đặt xe
+                        </button>
+                    </div>
+                </div>
+                <div
+                    class="relative w-full max-w-sm bg-[#1a1a1a] rounded-2xl overflow-hidden border border-lime-500 shadow-2xl shadow-lime-500/20 group font-sans">
+
+                    <div class="absolute top-3 left-3 z-10">
+                        <div
+                            class="bg-yellow-400 text-black px-3 py-1.5 rounded-lg font-bold text-xs flex items-center space-x-1 shadow-md">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="pt-8 pb-2 flex justify-center">
+                        <div
+                            class="w-48 h-48 rounded-full border-4 border-lime-500/50 overflow-hidden shadow-lg bg-gray-800 relative">
+                            <img src="image/xe_sxr.jpg"
+                                alt="Sxr Motor"
+                                class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110">
+                        </div>
+                    </div>
+
+                    <div class="px-4 pb-4">
+
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="text-xl font-bold text-lime-400">Xe motor</h3>
+                            <div class="flex items-center space-x-1 bg-gray-800 px-2 py-0.5 rounded-full">
+                                <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                    </path>
+                                </svg>
+                                <span class="text-white text-sm font-bold">4.5</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="text-2xl font-bold text-white">180.000 <span
+                                    class="text-sm font-normal text-gray-400">đ/ngày</span></div>
+                        </div>
+
+                        <div class="space-y-1 mb-4">
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                02 mũ bảo hiểm 1/2 đầu
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                02 áo mưa dùng 1 lần
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Giá đỡ điện thoại
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Dịch vụ cứu hộ
+                            </div>
+                        </div>
+
+                        <button
+                            class="w-full bg-lime-500 hover:bg-lime-400 text-black font-bold py-2.5 rounded-lg transition-colors shadow-lg text-sm uppercase tracking-wide">
+                            Gọi đặt xe
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <!-- Featured Bike Card -->
+                <div
+                    class="relative w-full max-w-sm bg-[#1a1a1a] rounded-2xl overflow-hidden border border-lime-500 shadow-2xl shadow-lime-500/20 group font-sans">
+
+                    <div class="absolute top-3 left-3 z-10">
+                        <div
+                            class="bg-yellow-400 text-black px-3 py-1.5 rounded-lg font-bold text-xs flex items-center space-x-1 shadow-md">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z">
+                                </path>
+                            </svg>
+                            <span>Lựa chọn tốt nhất</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-8 pb-2 flex justify-center">
+                        <div
+                            class="w-48 h-48 rounded-full border-4 border-lime-500/50 overflow-hidden shadow-lg bg-gray-800 relative">
+                            <img src="image/xe_1.jpg"
+                                alt="Cào Cào Ánh Du"
+                                class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110">
+                        </div>
+                    </div>
+
+                    <div class="px-4 pb-4">
+
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="text-xl font-bold text-lime-400">Xe Tay Ga</h3>
+                            <div class="flex items-center space-x-1 bg-gray-800 px-2 py-0.5 rounded-full">
+                                <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                    </path>
+                                </svg>
+                                <span class="text-white text-sm font-bold">4.5</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="text-2xl font-bold text-white">150.000 <span
+                                    class="text-sm font-normal text-gray-400">đ/ngày</span></div>
+                        </div>
+
+                        <div class="space-y-1 mb-4">
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                02 mũ bảo hiểm 1/2 đầu
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                02 áo mưa dùng 1 lần
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Giá đỡ điện thoại
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Dịch vụ cứu hộ
+                            </div>
+                        </div>
+
+                        <button
+                            class="w-full bg-lime-500 hover:bg-lime-400 text-black font-bold py-2.5 rounded-lg transition-colors shadow-lg text-sm uppercase tracking-wide">
+                            Gọi đặt xe
+                        </button>
+                    </div>
+                </div>
+                <div
+                    class="relative w-full max-w-sm bg-[#1a1a1a] rounded-2xl overflow-hidden border border-lime-500 shadow-2xl shadow-lime-500/20 group font-sans">
+
+                    <div class="absolute top-3 left-3 z-10">
+                        <div
+                            class="bg-yellow-400 text-black px-3 py-1.5 rounded-lg font-bold text-xs flex items-center space-x-1 shadow-md">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="pt-8 pb-2 flex justify-center">
+                        <div
+                            class="w-48 h-48 rounded-full border-4 border-lime-500/50 overflow-hidden shadow-lg bg-gray-800 relative">
+                            <img src="image/xe_2.jpg"
+                                alt="Tay Ga Ánh Du"
+                                class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110">
+                        </div>
+                    </div>
+
+                    <div class="px-4 pb-4">
+
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="text-xl font-bold text-lime-400">Tay Ga Các Loại</h3>
+                            <div class="flex items-center space-x-1 bg-gray-800 px-2 py-0.5 rounded-full">
+                                <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                    </path>
+                                </svg>
+                                <span class="text-white text-sm font-bold">4.5</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="text-2xl font-bold text-white">180.000 <span
+                                    class="text-sm font-normal text-gray-400">đ/ngày</span></div>
+                        </div>
+
+                        <div class="space-y-1 mb-4">
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                02 mũ bảo hiểm 1/2 đầu
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                02 áo mưa dùng 1 lần
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Giá đỡ điện thoại
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Dịch vụ cứu hộ
+                            </div>
+                        </div>
+
+                        <button
+                            class="w-full bg-lime-500 hover:bg-lime-400 text-black font-bold py-2.5 rounded-lg transition-colors shadow-lg text-sm uppercase tracking-wide">
+                            Gọi đặt xe
+                        </button>
+                    </div>
+                </div>
+                <div
+                    class="relative w-full max-w-sm bg-[#1a1a1a] rounded-2xl overflow-hidden border border-lime-500 shadow-2xl shadow-lime-500/20 group font-sans">
+
+                    <div class="absolute top-3 left-3 z-10">
+                        <div
+                            class="bg-yellow-400 text-black px-3 py-1.5 rounded-lg font-bold text-xs flex items-center space-x-1 shadow-md">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="pt-8 pb-2 flex justify-center">
+                        <div
+                            class="w-48 h-48 rounded-full border-4 border-lime-500/50 overflow-hidden shadow-lg bg-gray-800 relative">
+                            <img src="image/xe_3.jpg"
+                                alt="Vespa Ánh Du"
+                                class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110">
+                        </div>
+                    </div>
+
+                    <div class="px-4 pb-4">
+
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="text-xl font-bold text-lime-400">Xe Tây Ga </h3>
+                            <div class="flex items-center space-x-1 bg-gray-800 px-2 py-0.5 rounded-full">
+                                <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                    </path>
+                                </svg>
+                                <span class="text-white text-sm font-bold">4.5</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="text-2xl font-bold text-white">180.000 <span
+                                    class="text-sm font-normal text-gray-400">đ/ngày</span></div>
+                        </div>
+
+                        <div class="space-y-1 mb-4">
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                02 mũ bảo hiểm 1/2 đầu
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                02 áo mưa dùng 1 lần
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Giá đỡ điện thoại
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Dịch vụ cứu hộ
+                            </div>
+                        </div>
+
+                        <button
+                            class="w-full bg-lime-500 hover:bg-lime-400 text-black font-bold py-2.5 rounded-lg transition-colors shadow-lg text-sm uppercase tracking-wide">
+                            Gọi đặt xe
+                        </button>
+                    </div>
+                </div>
+                <div
+                    class="relative w-full max-w-sm bg-[#1a1a1a] rounded-2xl overflow-hidden border border-lime-500 shadow-2xl shadow-lime-500/20 group font-sans">
+
+                    <div class="absolute top-3 left-3 z-10">
+                        <div
+                            class="bg-yellow-400 text-black px-3 py-1.5 rounded-lg font-bold text-xs flex items-center space-x-1 shadow-md">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="pt-8 pb-2 flex justify-center">
+                        <div
+                            class="w-48 h-48 rounded-full border-4 border-lime-500/50 overflow-hidden shadow-lg bg-gray-800 relative">
+                            <img src="image/xe_@.jpg"
+                                alt="Sxr Motor"
+                                class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110">
+                        </div>
+                    </div>
+
+                    <div class="px-4 pb-4">
+
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="text-xl font-bold text-lime-400">Xe Tay Ga</h3>
+                            <div class="flex items-center space-x-1 bg-gray-800 px-2 py-0.5 rounded-full">
+                                <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                    </path>
+                                </svg>
+                                <span class="text-white text-sm font-bold">4.5</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="text-2xl font-bold text-white">180.000 <span
+                                    class="text-sm font-normal text-gray-400">đ/ngày</span></div>
+                        </div>
+
+                        <div class="space-y-1 mb-4">
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                02 mũ bảo hiểm 1/2 đầu
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                02 áo mưa dùng 1 lần
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Giá đỡ điện thoại
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Dịch vụ cứu hộ
+                            </div>
+                        </div>
+
+                        <button
+                            class="w-full bg-lime-500 hover:bg-lime-400 text-black font-bold py-2.5 rounded-lg transition-colors shadow-lg text-sm uppercase tracking-wide">
+                            Gọi đặt xe
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <!-- Featured Bike Card -->
+                <div
+                    class="relative w-full max-w-sm bg-[#1a1a1a] rounded-2xl overflow-hidden border border-lime-500 shadow-2xl shadow-lime-500/20 group font-sans">
+
+                    <div class="absolute top-3 left-3 z-10">
+                        <div
+                            class="bg-yellow-400 text-black px-3 py-1.5 rounded-lg font-bold text-xs flex items-center space-x-1 shadow-md">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z">
+                                </path>
+                            </svg>
+                            <span>Lựa chọn tốt nhất</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-8 pb-2 flex justify-center">
+                        <div
+                            class="w-48 h-48 rounded-full border-4 border-lime-500/50 overflow-hidden shadow-lg bg-gray-800 relative">
+                            <img src="image/xe_6.jpg"
+                                alt="Cào Cào Ánh Du"
+                                class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110">
+                        </div>
+                    </div>
+
+                    <div class="px-4 pb-4">
+
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="text-xl font-bold text-lime-400">Xe Tay Ga</h3>
+                            <div class="flex items-center space-x-1 bg-gray-800 px-2 py-0.5 rounded-full">
+                                <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                    </path>
+                                </svg>
+                                <span class="text-white text-sm font-bold">4.5</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="text-2xl font-bold text-white">180.000 <span
+                                    class="text-sm font-normal text-gray-400">đ/ngày</span></div>
+                        </div>
+
+                        <div class="space-y-1 mb-4">
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                02 mũ bảo hiểm 1/2 đầu
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                02 áo mưa dùng 1 lần
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Giá đỡ điện thoại
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Dịch vụ cứu hộ
+                            </div>
+                        </div>
+
+                        <button
+                            class="w-full bg-lime-500 hover:bg-lime-400 text-black font-bold py-2.5 rounded-lg transition-colors shadow-lg text-sm uppercase tracking-wide">
+                            Gọi đặt xe
+                        </button>
+                    </div>
+                </div>
+                <div
+                    class="relative w-full max-w-sm bg-[#1a1a1a] rounded-2xl overflow-hidden border border-lime-500 shadow-2xl shadow-lime-500/20 group font-sans">
+
+                    <div class="absolute top-3 left-3 z-10">
+                        <div
+                            class="bg-yellow-400 text-black px-3 py-1.5 rounded-lg font-bold text-xs flex items-center space-x-1 shadow-md">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="pt-8 pb-2 flex justify-center">
+                        <div
+                            class="w-48 h-48 rounded-full border-4 border-lime-500/50 overflow-hidden shadow-lg bg-gray-800 relative">
+                            <img src="image/xe_7.jpg"
+                                alt="Tay Ga Ánh Du"
+                                class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110">
+                        </div>
+                    </div>
+
+                    <div class="px-4 pb-4">
+
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="text-xl font-bold text-lime-400">Tay Ga Các Loại</h3>
+                            <div class="flex items-center space-x-1 bg-gray-800 px-2 py-0.5 rounded-full">
+                                <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                    </path>
+                                </svg>
+                                <span class="text-white text-sm font-bold">4.5</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="text-2xl font-bold text-white">180.000 <span
+                                    class="text-sm font-normal text-gray-400">đ/ngày</span></div>
+                        </div>
+
+                        <div class="space-y-1 mb-4">
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                02 mũ bảo hiểm 1/2 đầu
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                02 áo mưa dùng 1 lần
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Giá đỡ điện thoại
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Dịch vụ cứu hộ
+                            </div>
+                        </div>
+
+                        <button
+                            class="w-full bg-lime-500 hover:bg-lime-400 text-black font-bold py-2.5 rounded-lg transition-colors shadow-lg text-sm uppercase tracking-wide">
+                            Gọi đặt xe
+                        </button>
+                    </div>
+                </div>
+                <div
+                    class="relative w-full max-w-sm bg-[#1a1a1a] rounded-2xl overflow-hidden border border-lime-500 shadow-2xl shadow-lime-500/20 group font-sans">
+
+                    <div class="absolute top-3 left-3 z-10">
+                        <div
+                            class="bg-yellow-400 text-black px-3 py-1.5 rounded-lg font-bold text-xs flex items-center space-x-1 shadow-md">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="pt-8 pb-2 flex justify-center">
+                        <div
+                            class="w-48 h-48 rounded-full border-4 border-lime-500/50 overflow-hidden shadow-lg bg-gray-800 relative">
+                            <img src="image/xe_9.jpg"
+                                alt="Vespa Ánh Du"
+                                class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110">
+                        </div>
+                    </div>
+
+                    <div class="px-4 pb-4">
+
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="text-xl font-bold text-lime-400">Xe Tay Ga</h3>
+                            <div class="flex items-center space-x-1 bg-gray-800 px-2 py-0.5 rounded-full">
+                                <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                    </path>
+                                </svg>
+                                <span class="text-white text-sm font-bold">4.5</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="text-2xl font-bold text-white">180.000 <span
+                                    class="text-sm font-normal text-gray-400">đ/ngày</span></div>
+                        </div>
+
+                        <div class="space-y-1 mb-4">
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                02 mũ bảo hiểm 1/2 đầu
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                02 áo mưa dùng 1 lần
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Giá đỡ điện thoại
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Dịch vụ cứu hộ
+                            </div>
+                        </div>
+
+                        <button
+                            class="w-full bg-lime-500 hover:bg-lime-400 text-black font-bold py-2.5 rounded-lg transition-colors shadow-lg text-sm uppercase tracking-wide">
+                            Gọi đặt xe
+                        </button>
+                    </div>
+                </div>
+                <div
+                    class="relative w-full max-w-sm bg-[#1a1a1a] rounded-2xl overflow-hidden border border-lime-500 shadow-2xl shadow-lime-500/20 group font-sans">
+
+                    <div class="absolute top-3 left-3 z-10">
+                        <div
+                            class="bg-yellow-400 text-black px-3 py-1.5 rounded-lg font-bold text-xs flex items-center space-x-1 shadow-md">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="pt-8 pb-2 flex justify-center">
+                        <div
+                            class="w-48 h-48 rounded-full border-4 border-lime-500/50 overflow-hidden shadow-lg bg-gray-800 relative">
+                            <img src="image/xe_10.jpg"
+                                alt="Sxr Motor"
+                                class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110">
+                        </div>
+                    </div>
+
+                    <div class="px-4 pb-4">
+
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="text-xl font-bold text-lime-400">Xe Tay Ga</h3>
+                            <div class="flex items-center space-x-1 bg-gray-800 px-2 py-0.5 rounded-full">
+                                <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                    </path>
+                                </svg>
+                                <span class="text-white text-sm font-bold">4.5</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="text-2xl font-bold text-white">180.000 <span
+                                    class="text-sm font-normal text-gray-400">đ/ngày</span></div>
+                        </div>
+
+                        <div class="space-y-1 mb-4">
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                02 mũ bảo hiểm 1/2 đầu
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                02 áo mưa dùng 1 lần
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Giá đỡ điện thoại
+                            </div>
+                            <div class="flex items-center text-gray-300 text-xs">
+                                <svg class="w-3.5 h-3.5 mr-2 text-lime-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Dịch vụ cứu hộ
+                            </div>
+                        </div>
+
+                        <button
+                            class="w-full bg-lime-500 hover:bg-lime-400 text-black font-bold py-2.5 rounded-lg transition-colors shadow-lg text-sm uppercase tracking-wide">
+                            Gọi đặt xe
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- View All Button -->
+            <div class="text-center">
+                <button
+                    class="px-12 py-4 bg-green-500 hover:bg-green-400 text-black font-bold text-lg rounded-lg transition-colors inline-flex items-center space-x-2">
+                    <span>Bảng giá chi tiết</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Other Sections -->
+    <!-- Testimonials Section -->
+    <section class="bg-gradient-to-b from-gray-900 to-black py-20 relative overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0 opacity-30">
+            <img src="https://images.unsplash.com/photo-1558981359-219d6364c9c8?w=1600&h=900&fit=crop" alt="Background"
+                class="w-full h-full object-cover">
+        </div>
+        <div class="absolute inset-0 bg-black/60"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Header -->
+            <div class="flex justify-between items-center mb-12">
+                <div>
+                    <p class="text-gray-400 text-sm mb-2">Trải nghiệm chuẩn thượng lưu</p>
+                    <h2 class="text-4xl md:text-5xl font-bold text-white">
+                        Trải nghiệm của du khách
+                    </h2>
+                </div>
+                <button
+                    class="hidden md:block px-6 py-3 border-2 border-lime-500 text-lime-500 rounded-lg font-semibold hover:bg-lime-500 hover:text-black transition-colors">
+                    Xem tất cả
+                </button>
+            </div>
+
+            <!-- Testimonials Carousel -->
+            <div class="relative">
+                <div class="testimonials-wrapper overflow-hidden">
+                    <div class="testimonials-track flex transition-transform duration-500 ease-out">
+                        <!-- Testimonial Card 1 -->
+                        <div
+                            class="testimonial-slide min-w-full md:min-w-[calc(50%-12px)] lg:min-w-[calc(33.333%-16px)] px-2">
+                            <div
+                                class="bg-gradient-to-br from-green-500/90 to-lime-400/90 backdrop-blur-sm rounded-2xl p-8 relative">
+                                <!-- Quote Icon -->
+                                <div class="absolute top-4 right-4 text-white/20">
+                                    <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z" />
+                                    </svg>
+                                </div>
+
+                                <!-- Avatar & Info -->
+                                <div class="flex items-center mb-4">
+                                    <img src="https://i.pravatar.cc/150?img=1" alt="Customer"
+                                        class="w-16 h-16 rounded-full border-4 border-white shadow-lg">
+                                    <div class="ml-4">
+                                        <h3 class="text-xl font-bold text-black">Nguyễn Văn An</h3>
+                                        <div class="flex items-center mt-1">
+                                            <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                            </svg>
+                                            <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                            </svg>
+                                            <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                            </svg>
+                                            <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                            </svg>
+                                            <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Review Text -->
+                                <p class="text-black leading-relaxed mb-4">
+                                    Dịch vụ của Ánh Du thật sự tuyệt vời! Xe mới, chạy êm và thủ tục thuê rất nhanh gọn.
+                                    Nhân viên hỗ trợ tận tình, khiến chuyến đi Phan Thiết của tôi trở nên trọn vẹn nhất
+                                </p>
+
+                                <button class="text-black font-semibold hover:text-white transition-colors underline">
+                                    Xem chi tiết
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Testimonial Card 2 -->
+                        <div
+                            class="testimonial-slide min-w-full md:min-w-[calc(50%-12px)] lg:min-w-[calc(33.333%-16px)] px-2">
+                            <div
+                                class="bg-gradient-to-br from-green-600/80 to-green-700/80 backdrop-blur-sm rounded-2xl p-8 relative">
+                                <div class="absolute top-4 right-4 text-white/20">
+                                    <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z" />
+                                    </svg>
+                                </div>
+
+                                <div class="flex items-center mb-4">
+                                    <img src="https://i.pravatar.cc/150?img=5" alt="Customer"
+                                        class="w-16 h-16 rounded-full border-4 border-white shadow-lg">
+                                    <div class="ml-4">
+                                        <h3 class="text-xl font-bold text-white">Nguyễn Huynh Anh Linh</h3>
+                                        <div class="flex items-center mt-1">
+                                            <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                            </svg>
+                                            <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                            </svg>
+                                            <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                            </svg>
+                                            <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p class="text-white leading-relaxed mb-4">
+                                    Dịch vụ của Ánh Du thật sự tuyệt vời! Xe mới, chạy êm và thủ tục thuê rất nhanh gọn.
+                                    Nhân viên hỗ trợ tận tình, khiến chuyến đi Phan Thiết của tôi trở nên trọn vẹn nhất
+                                </p>
+
+                                <button
+                                    class="text-white font-semibold hover:text-lime-300 transition-colors underline">
+                                    Xem chi tiết
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Testimonial Card 3 -->
+                        <div
+                            class="testimonial-slide min-w-full md:min-w-[calc(50%-12px)] lg:min-w-[calc(33.333%-16px)] px-2">
+                            <div
+                                class="bg-gradient-to-br from-green-600/80 to-green-700/80 backdrop-blur-sm rounded-2xl p-8 relative">
+                                <div class="absolute top-4 right-4 text-white/20">
+                                    <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z" />
+                                    </svg>
+                                </div>
+
+                                <div class="flex items-center mb-4">
+                                    <img src="https://i.pravatar.cc/150?img=8" alt="Customer"
+                                        class="w-16 h-16 rounded-full border-4 border-white shadow-lg">
+                                    <div class="ml-4">
+                                        <h3 class="text-xl font-bold text-white">Trần Thị Bình</h3>
+                                        <div class="flex items-center mt-1">
+                                            <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                            </svg>
+                                            <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                            </svg>
+                                            <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                            </svg>
+                                            <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                            </svg>
+                                            <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p class="text-white leading-relaxed mb-4">
+                                    Thuê xe ở đây rất tiện lợi! Giá cả hợp lý, xe đẹp và được bảo dưỡng tốt. Tôi đã có
+                                    một chuyến phượt tuyệt vời quanh Phan Thiết. Chắc chắn sẽ quay lại lần sau!
+                                </p>
+
+                                <button
+                                    class="text-white font-semibold hover:text-lime-300 transition-colors underline">
+                                    Xem chi tiết
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Arrows -->
+                <button
+                    class="testimonials-prev absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 bg-black/50 hover:bg-lime-500 text-white p-3 rounded-full transition-colors z-10">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
+                        </path>
+                    </svg>
+                </button>
+                <button
+                    class="testimonials-next absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 bg-black/50 hover:bg-lime-500 text-white p-3 rounded-full transition-colors z-10">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- View All Button Mobile -->
+            <div class="text-center mt-8 md:hidden">
+                <button
+                    class="px-6 py-3 border-2 border-lime-500 text-lime-500 rounded-lg font-semibold hover:bg-lime-500 hover:text-black transition-colors">
+                    Xem tất cả
+                </button>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Why Choose Us Section -->
+    <section class="bg-black py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Header -->
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
+                    Lý do bạn nên chọn chúng tôi
+                </h2>
+            </div>
+
+            <!-- Features Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Feature 1 -->
+                <div
+                    class="group relative bg-gradient-to-br from-gray-900 to-black border border-gray-800 rounded-2xl p-8 hover:border-lime-500 transition-all duration-300 overflow-hidden">
+                    <!-- Glow Effect -->
+                    <div class="absolute inset-0 bg-lime-500/0 group-hover:bg-lime-500/5 transition-all duration-300">
+                    </div>
+
+                    <!-- Icon with Glow -->
+                    <div class="relative mb-6 flex justify-center">
+                        <div
+                            class="w-24 h-24 bg-lime-500 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-lime-500/50 transition-all duration-300">
+                            <!-- Credit Card with X Icon -->
+                            <svg class="w-12 h-12 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <rect x="2" y="5" width="20" height="14" rx="2" stroke-width="2" />
+                                <line x1="2" y1="10" x2="22" y2="10" stroke-width="2" />
+                                <line x1="6" y1="16" x2="10" y2="16" stroke-width="2" />
+                                <line x1="14" y1="14" x2="18" y2="18" stroke-width="2" />
+                                <line x1="18" y1="14" x2="14" y2="18" stroke-width="2" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="relative text-center">
+                        <h3 class="text-xl font-bold text-white mb-3">
+                            Không tiền đặt cọc
+                        </h3>
+                        <p class="text-gray-400 leading-relaxed">
+                            Thuê xe dễ dàng, không cần thủ tục rườm rà
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 2 -->
+                <div
+                    class="group relative bg-gradient-to-br from-gray-900 to-black border border-gray-800 rounded-2xl p-8 hover:border-lime-500 transition-all duration-300 overflow-hidden">
+                    <div class="absolute inset-0 bg-lime-500/0 group-hover:bg-lime-500/5 transition-all duration-300">
+                    </div>
+
+                    <div class="relative mb-6 flex justify-center">
+                        <div
+                            class="w-24 h-24 bg-lime-500 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-lime-500/50 transition-all duration-300">
+                            <!-- 24h Clock Icon -->
+                            <svg class="w-12 h-12 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="9" stroke-width="2" />
+                                <path d="M12 6v6l4 2" stroke-width="2" stroke-linecap="round" />
+                                <text x="12" y="8" font-size="4" fill="currentColor" text-anchor="middle"
+                                    font-weight="bold">24</text>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="relative text-center">
+                        <h3 class="text-xl font-bold text-white mb-3">
+                            1 ngày thuê = 24h
+                        </h3>
+                        <p class="text-gray-400 leading-relaxed">
+                            Tính dư 24 giờ, thoải mái cho lịch trình của bạn
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 3 -->
+                <div
+                    class="group relative bg-gradient-to-br from-gray-900 to-black border border-gray-800 rounded-2xl p-8 hover:border-lime-500 transition-all duration-300 overflow-hidden">
+                    <div class="absolute inset-0 bg-lime-500/0 group-hover:bg-lime-500/5 transition-all duration-300">
+                    </div>
+
+                    <div class="relative mb-6 flex justify-center">
+                        <div
+                            class="w-24 h-24 bg-lime-500 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-lime-500/50 transition-all duration-300">
+                            <!-- Motorbike Icon -->
+                            <svg class="w-12 h-12 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <circle cx="6" cy="19" r="2" stroke-width="2" />
+                                <circle cx="18" cy="19" r="2" stroke-width="2" />
+                                <path d="M12 5l3 7h3M9 12h6M6 19l3-7 3 1" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="relative text-center">
+                        <h3 class="text-xl font-bold text-white mb-3">
+                            Giao, trả xe tận nơi
+                        </h3>
+                        <p class="text-gray-400 leading-relaxed">
+                            Trả và giao xe nhanh chóng, tiện lợi ở bất cứ đâu
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 4 -->
+                <div
+                    class="group relative bg-gradient-to-br from-gray-900 to-black border border-gray-800 rounded-2xl p-8 hover:border-lime-500 transition-all duration-300 overflow-hidden">
+                    <div class="absolute inset-0 bg-lime-500/0 group-hover:bg-lime-500/5 transition-all duration-300">
+                    </div>
+
+                    <div class="relative mb-6 flex justify-center">
+                        <div
+                            class="w-24 h-24 bg-lime-500 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-lime-500/50 transition-all duration-300">
+                            <!-- Payment Icon -->
+                            <svg class="w-12 h-12 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <rect x="2" y="5" width="20" height="14" rx="2" stroke-width="2" />
+                                <line x1="2" y1="10" x2="22" y2="10" stroke-width="2" />
+                                <circle cx="7" cy="15" r="1" fill="currentColor" />
+                                <circle cx="12" cy="15" r="1" fill="currentColor" />
+                                <path d="M16 14h3v2h-3v-2z" fill="currentColor" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="relative text-center">
+                        <h3 class="text-xl font-bold text-white mb-3">
+                            Đi đâu, trả đó
+                        </h3>
+                        <p class="text-gray-400 leading-relaxed">
+                            Không phụ phí, chỉ phí minh bạch và rõ ràng
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Contact & Locations Section -->
+    <section class="relative bg-gradient-to-b from-gray-900 to-black py-20 overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0 opacity-20">
+            <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1600&h=900&fit=crop" alt="Background"
+                class="w-full h-full object-cover">
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-b from-black/80 to-black/90"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Header -->
+            <div class="text-center mb-16">
+                <p class="text-gray-400 text-sm mb-2">Đồng hành cùng bạn trên mọi cung đường</p>
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
+                    Cửa hàng của Ánh Du - Thuê xe máy
+                </h2>
+            </div>
+
+            <!-- Locations Container -->
+            <div class="relative">
+                <!-- Vietnam Map Dotted Pattern (Center) -->
+                <div class="hidden lg:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-80">
+                    <svg viewBox="0 0 200 300" class="w-full h-full opacity-30">
+                        <!-- Simplified Vietnam map shape with dots -->
+                        <defs>
+                            <pattern id="dots" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+                                <circle cx="5" cy="5" r="1.5" fill="#84cc16" />
+                            </pattern>
+                        </defs>
+                        <path
+                            d="M100,20 L120,40 L130,80 L140,120 L130,160 L120,200 L100,240 L80,260 L70,280 L60,260 L50,240 L60,200 L70,160 L60,120 L70,80 L80,40 Z"
+                            fill="url(#dots)" stroke="#84cc16" stroke-width="2" opacity="0.5" />
+                        <!-- Center marker -->
+                        <circle cx="100" cy="180" r="8" fill="#84cc16" class="animate-pulse" />
+                        <circle cx="100" cy="180" r="4" fill="#000" />
+                    </svg>
+                </div>
+
+                <!-- Grid Layout -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
+                    <!-- Phan Thiết Location (Left) -->
+                    <div class="relative">
+                        <div
+                            class="bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-sm border border-lime-500/30 rounded-2xl p-8 hover:border-lime-500 transition-all duration-300">
+                            <!-- Location Icon & Title -->
+                            <div class="flex items-center mb-6">
+                                <div class="w-12 h-12 bg-lime-500 rounded-full flex items-center justify-center mr-4">
+                                    <svg class="w-6 h-6 text-black" fill="currentColor" viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                                    </svg>
+                                </div>
+                                <h3 class="text-3xl font-bold text-lime-500">Phan Thiết</h3>
+                            </div>
+
+                            <!-- Address 1 -->
+                            <div class="flex items-start mb-4">
+                                <svg class="w-5 h-5 text-lime-500 mr-3 mt-1 flex-shrink-0" fill="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                                </svg>
+                                <p class="text-gray-300">Đường Thủ Khoa Huân, Phan Thiết, Việt Nam, Phan Thiet, Vietnam
+                                </p>
+                            </div>
+
+                            <!-- Address 2 -->
+                            <div class="flex items-start mb-4">
+                                <svg class="w-5 h-5 text-lime-500 mr-3 mt-1 flex-shrink-0" fill="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                                </svg>
+                                <p class="text-gray-300">39ab hùng vương .P Phú hài . Tp Phan thiết. Bình thuận</p>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="flex items-center mb-4">
+                                <svg class="w-5 h-5 text-lime-500 mr-3" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                                </svg>
+                                <a href="mailto:anhdu@gmail.com"
+                                    class="text-gray-300 hover:text-lime-500 transition-colors">anhdu@gmail.com</a>
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-lime-500 mr-3" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
+                                </svg>
+                                <a href="tel:0964646417" class="text-gray-300 hover:text-lime-500 transition-colors">096
+                                    464 6417</a>
+                            </div>
+                        </div>
+
+                        <!-- Arrow connecting to center (Hidden on mobile) -->
+                        <svg class="hidden lg:block absolute -right-20 top-1/2 -translate-y-1/2 w-32 h-32"
+                            viewBox="0 0 100 100">
+                            <defs>
+                                <marker id="arrowhead-left" markerWidth="10" markerHeight="10" refX="5" refY="5"
+                                    orient="auto">
+                                    <polygon points="0,0 10,5 0,10" fill="#84cc16" />
+                                </marker>
+                            </defs>
+                            <path d="M 10 50 Q 50 30, 90 50" stroke="#84cc16" stroke-width="2" fill="none"
+                                marker-end="url(#arrowhead-left)" />
+                        </svg>
+                    </div>
+
+                    <!-- Mũi Né Location (Right) -->
+                    <div class="relative">
+                        <div
+                            class="bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-sm border border-lime-500/30 rounded-2xl p-8 hover:border-lime-500 transition-all duration-300">
+                            <!-- Location Icon & Title -->
+                            <div class="flex items-center mb-6">
+                                <div class="w-12 h-12 bg-lime-500 rounded-full flex items-center justify-center mr-4">
+                                    <svg class="w-6 h-6 text-black" fill="currentColor" viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                                    </svg>
+                                </div>
+                                <h3 class="text-3xl font-bold text-lime-500">Mũi Né</h3>
+                            </div>
+
+                            <!-- Address -->
+                            <div class="flex items-start mb-4">
+                                <svg class="w-5 h-5 text-lime-500 mr-3 mt-1 flex-shrink-0" fill="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                                </svg>
+                                <p class="text-gray-300">W5RR+94G, khu phố 1, Hàm Thuận Bắc, Bình Thuận</p>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="flex items-center mb-4">
+                                <svg class="w-5 h-5 text-lime-500 mr-3" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                                </svg>
+                                <a href="mailto:anhdu@gmail.com"
+                                    class="text-gray-300 hover:text-lime-500 transition-colors">anhdu@gmail.com</a>
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-lime-500 mr-3" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
+                                </svg>
+                                <a href="tel:0964646417" class="text-gray-300 hover:text-lime-500 transition-colors">096
+                                    464 6417</a>
+                            </div>
+                        </div>
+
+                        <!-- Arrow connecting to center (Hidden on mobile) -->
+                        <svg class="hidden lg:block absolute -left-20 top-1/2 -translate-y-1/2 w-32 h-32"
+                            viewBox="0 0 100 100">
+                            <defs>
+                                <marker id="arrowhead-right" markerWidth="10" markerHeight="10" refX="5" refY="5"
+                                    orient="auto">
+                                    <polygon points="0,0 10,5 0,10" fill="#84cc16" />
+                                </marker>
+                            </defs>
+                            <path d="M 90 50 Q 50 70, 10 50" stroke="#84cc16" stroke-width="2" fill="none"
+                                marker-end="url(#arrowhead-right)" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Blog/Travel Guide Section -->
+    <section id="blog-du-lich" class="bg-black py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Header -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-gray-400 text-sm mb-2">Khám phá thế giới theo cách của riêng bạn</p>
+                    <h2 class="text-4xl md:text-5xl font-bold text-lime-500">
+                        Cẩm nang khám phá hành trình của bạn
+                    </h2>
+                </div>
+                <button
+                    class="px-6 py-3 border-2 border-lime-500 text-lime-500 rounded-lg font-semibold hover:bg-lime-500 hover:text-black transition-colors">
+                    Xem tất cả
+                </button>
+            </div>
+
+            <!-- Blog Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Featured Blog Post (Large) -->
+                <div class="lg:row-span-2">
+                    <article
+                        class="group relative h-full bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden border border-gray-800 hover:border-lime-500 transition-all duration-300">
+                        <!-- Image -->
+                        <div class="relative h-96 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1533105079780-92b9be482077?w=800&h=600&fit=crop"
+                                alt="Biển Gọi 2025"
+                                class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="absolute bottom-0 left-0 right-0 p-8">
+                            <!-- Date & Category -->
+                            <div class="flex items-center space-x-3 mb-4">
+                                <span class="text-lime-500 text-sm font-semibold">22/11/2025</span>
+                                <span class="text-gray-400">_</span>
+                                <span class="text-gray-400 text-sm">Tin tức</span>
+                            </div>
+
+                            <!-- Title -->
+                            <h3 class="text-3xl font-bold text-white mb-4 group-hover:text-lime-500 transition-colors">
+                                LỄ HỘI "BIỂN GỌI 2025" HỨA HẸN KHUẤY ĐỘNG MÙA HÈ
+                            </h3>
+
+                            <!-- Description -->
+                            <p class="text-gray-300 leading-relaxed mb-6">
+                                Tháng 6 tới, thành phố Phan Thiết sẽ tổ chức lễ hội "Biển gọi 2025" với hàng loạt hoạt
+                                động: diễu hành, âm nhạc bãi biển....
+                            </p>
+
+                            <!-- Read More -->
+                            <button
+                                class="text-lime-500 font-semibold hover:text-lime-400 transition-colors inline-flex items-center group/btn">
+                                Xem chi tiết
+                                <svg class="w-5 h-5 ml-2 transform group-hover/btn:translate-x-2 transition-transform"
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- Small Blog Posts (Right Side) -->
+                <div class="space-y-8">
+                    <!-- Blog Post 1 -->
+                    <article
+                        class="group flex flex-col sm:flex-row gap-6 bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden border border-gray-800 hover:border-lime-500 transition-all duration-300 p-4">
+                        <!-- Image -->
+                        <div class="relative w-full sm:w-48 h-48 flex-shrink-0 rounded-xl overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?w=400&h=300&fit=crop"
+                                alt="Phan Thiết Cao Tốc"
+                                class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                        </div>
+
+                        <!-- Content -->
+                        <div class="flex-1">
+                            <!-- Date & Category -->
+                            <div class="flex items-center space-x-3 mb-3">
+                                <span class="text-lime-500 text-xs font-semibold">22/11/2025</span>
+                                <span class="text-gray-400">_</span>
+                                <span class="text-gray-400 text-xs">Tin tức</span>
+                            </div>
+
+                            <!-- Title -->
+                            <h3
+                                class="text-xl font-bold text-white mb-3 group-hover:text-lime-500 transition-colors line-clamp-2">
+                                PHAN THIẾT BỨT PHÁ VỚI CAO TỐC MỚI
+                            </h3>
+
+                            <!-- Description -->
+                            <p class="text-gray-400 text-sm leading-relaxed line-clamp-2">
+                                Tuyến cao tốc Dầu Giây – Phan Thiết chính thức đưa vào hoạt động giúp thời gian...
+                            </p>
+                        </div>
+                    </article>
+
+                    <!-- Blog Post 2 -->
+                    <article
+                        class="group flex flex-col sm:flex-row gap-6 bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden border border-gray-800 hover:border-lime-500 transition-all duration-300 p-4">
+                        <!-- Image -->
+                        <div class="relative w-full sm:w-48 h-48 flex-shrink-0 rounded-xl overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop"
+                                alt="Mũi Né"
+                                class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                        </div>
+
+                        <!-- Content -->
+                        <div class="flex-1">
+                            <!-- Date & Category -->
+                            <div class="flex items-center space-x-3 mb-3">
+                                <span class="text-lime-500 text-xs font-semibold">22/11/2025</span>
+                                <span class="text-gray-400">_</span>
+                                <span class="text-gray-400 text-xs">Tin tức</span>
+                            </div>
+
+                            <!-- Title -->
+                            <h3
+                                class="text-xl font-bold text-white mb-3 group-hover:text-lime-500 transition-colors line-clamp-2">
+                                MŨI NÉ LỌT TOP ĐIỂM ĐẾN BIỂN ĐẸP NHẤT
+                            </h3>
+
+                            <!-- Description -->
+                            <p class="text-gray-400 text-sm leading-relaxed line-clamp-2">
+                                Theo tạp chí Travel Asia, Mũi Né (Phan Thiết) được vinh danh là một trong những...
+                            </p>
+                        </div>
+                    </article>
+
+                    <!-- Blog Post 3 -->
+                    <article
+                        class="group flex flex-col sm:flex-row gap-6 bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden border border-gray-800 hover:border-lime-500 transition-all duration-300 p-4">
+                        <!-- Image -->
+                        <div class="relative w-full sm:w-48 h-48 flex-shrink-0 rounded-xl overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=300&fit=crop"
+                                alt="Ẩm Thực Phan Thiết"
+                                class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                        </div>
+
+                        <!-- Content -->
+                        <div class="flex-1">
+                            <!-- Date & Category -->
+                            <div class="flex items-center space-x-3 mb-3">
+                                <span class="text-lime-500 text-xs font-semibold">22/11/2025</span>
+                                <span class="text-gray-400">_</span>
+                                <span class="text-gray-400 text-xs">Tin tức</span>
+                            </div>
+
+                            <!-- Title -->
+                            <h3
+                                class="text-xl font-bold text-white mb-3 group-hover:text-lime-500 transition-colors line-clamp-2">
+                                ẨM THỰC PHAN THIẾT- HƯƠNG VỊ BIỂN
+                            </h3>
+
+                            <!-- Description -->
+                            <p class="text-gray-400 text-sm leading-relaxed line-clamp-2">
+                                Từ bánh căn nóng hổi, chả cá tươi rói đến đồng nướng sa tế – Phan Thiết khiến thực
+                                khách...
+                            </p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="relative bg-black py-20 overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0">
+            <img src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=1600&h=600&fit=crop" alt="Motorbikes"
+                class="w-full h-full object-cover opacity-40">
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-black/60"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="max-w-3xl">
+                <!-- Title -->
+                <h2 class="text-4xl md:text-6xl font-bold text-lime-500 mb-6">
+                    GỌI NGAY CHO ÁNH DU
+                </h2>
+
+                <!-- Description -->
+                <p class="text-xl text-gray-300 mb-8 leading-relaxed">
+                    Giỏ biển gọi tên, khởi đầu chuyến phiêu lưu đầy cảm xúc nơi sóng và nắng hòa quyền
+                </p>
+
+                <!-- CTA Button -->
+                <a href="tel:0964646417"
+                    class="inline-flex items-center px-8 py-4 bg-lime-500 hover:bg-lime-400 text-black font-bold text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-lime-500/50 group">
+                    <svg class="w-6 h-6 mr-3 group-hover:animate-bounce" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
+                    </svg>
+                    096 464 64 17s
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+                <!-- Company Info -->
+                <div>
+                    <!-- Logo -->
+                    <div class="flex items-center space-x-3 mb-6">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='none' stroke='%23EAB308' stroke-width='3'/%3E%3Cpath d='M35 50 L45 35 L50 40 L55 30 L60 45 L65 40' fill='none' stroke='%23EAB308' stroke-width='2'/%3E%3Ccircle cx='45' cy='60' r='8' fill='none' stroke='%23EAB308' stroke-width='2'/%3E%3Ccircle cx='65' cy='65' r='10' fill='none' stroke='%23EAB308' stroke-width='2'/%3E%3C/svg%3E"
+                            alt="ÁNH DU Logo" class="h-16 w-16">
+                        <span class="text-2xl font-bold text-lime-500">ÁNH DU</span>
+                    </div>
+                    <p class="text-gray-400 leading-relaxed mb-6">
+                        Ánh Du là dịch vụ cho thuê xe máy tự lái chuyên nghiệp tại Việt Nam
+                    </p>
+                    <!-- Social Media -->
+                    <div class="flex space-x-4">
+                        <a href="#"
+                            class="w-10 h-10 bg-gray-800 hover:bg-lime-500 rounded-full flex items-center justify-center transition-colors group">
+                            <svg class="w-5 h-5 text-gray-400 group-hover:text-black" fill="currentColor"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                            </svg>
+                        </a>
+                        <a href="#"
+                            class="w-10 h-10 bg-gray-800 hover:bg-lime-500 rounded-full flex items-center justify-center transition-colors group">
+                            <svg class="w-5 h-5 text-gray-400 group-hover:text-black" fill="currentColor"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                            </svg>
+                        </a>
+                        <a href="#"
+                            class="w-10 h-10 bg-gray-800 hover:bg-lime-500 rounded-full flex items-center justify-center transition-colors group">
+                            <svg class="w-5 h-5 text-gray-400 group-hover:text-black" fill="currentColor"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
+                            </svg>
+                        </a>
+                        <a href="#"
+                            class="w-10 h-10 bg-gray-800 hover:bg-lime-500 rounded-full flex items-center justify-center transition-colors group">
+                            <svg class="w-5 h-5 text-gray-400 group-hover:text-black" fill="currentColor"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Liên Hệ -->
+                <div>
+                    <h3 class="text-lime-500 font-bold text-lg mb-6">LIÊN HỆ</h3>
+                    <ul class="space-y-4">
+                        <li>
+                            <p class="text-gray-400 text-sm font-semibold mb-2">CS1:</p>
+                            <p class="text-gray-300 text-sm">15 Nguyễn đình chiểu. P Hàm tiến. Tp phan thiết . Bình
+                                thuận</p>
+                        </li>
+                        <li>
+                            <p class="text-gray-400 text-sm font-semibold mb-2">CS2:</p>
+                            <p class="text-gray-300 text-sm">39ab hùng vương .P Phú hài . Tp Phan thiết. Bình thuận</p>
+                        </li>
+                        <li>
+                            <p class="text-gray-400 text-sm font-semibold mb-2">Sđt:</p>
+                            <a href="tel:0964646417" class="text-lime-500 hover:text-lime-400 transition-colors">096 464
+                                6417</a>
+                        </li>
+                        <li>
+                            <p class="text-gray-400 text-sm font-semibold mb-2">Mail:</p>
+                            <a href="mailto:anhdu@gmail.com"
+                                class="text-lime-500 hover:text-lime-400 transition-colors">anhdu@gmail.com</a>
+                        </li>
+                        <li>
+                            <p class="text-gray-400 text-sm font-semibold mb-2">Mở cửa:</p>
+                            <p class="text-gray-300 text-sm">07:00 - 22:00</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Chính Sách -->
+                <div>
+                    <h3 class="text-lime-500 font-bold text-lg mb-6">CHÍNH SÁCH</h3>
+                    <ul class="space-y-3">
+                        <li>
+                            <a href="#"
+                                class="text-gray-300 hover:text-lime-500 transition-colors flex items-center group">
+                                <svg class="w-4 h-4 mr-2 text-lime-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                Chính sách bảo mật
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#"
+                                class="text-gray-300 hover:text-lime-500 transition-colors flex items-center group">
+                                <svg class="w-4 h-4 mr-2 text-lime-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                Chính sách thuê xe
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#"
+                                class="text-gray-300 hover:text-lime-500 transition-colors flex items-center group">
+                                <svg class="w-4 h-4 mr-2 text-lime-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                Chính sách giao nhận xe
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#"
+                                class="text-gray-300 hover:text-lime-500 transition-colors flex items-center group">
+                                <svg class="w-4 h-4 mr-2 text-lime-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                Chính sách hủy & hoàn tiền
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#"
+                                class="text-gray-300 hover:text-lime-500 transition-colors flex items-center group">
+                                <svg class="w-4 h-4 mr-2 text-lime-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                Điều khoản sử dụng
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Google Map -->
+                <div>
+                    <h3 class="text-lime-500 font-bold text-lg mb-6">GOOGLE MAP</h3>
+                    <div class="space-y-4">
+                        <button
+                            class="w-full px-4 py-2 bg-lime-500 hover:bg-lime-400 text-black font-semibold rounded-lg transition-colors">
+                            Cơ sở 1
+                        </button>
+                        <button
+                            class="w-full px-4 py-2 border-2 border-lime-500 text-lime-500 hover:bg-lime-500 hover:text-black font-semibold rounded-lg transition-colors">
+                            Cơ sở 2
+                        </button>
+                        <!-- Map Preview -->
+                        <div class="relative h-48 rounded-lg overflow-hidden border-2 border-gray-800">
+                            <iframe 
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63329.64209763287!2d108.04449404863277!3d10.940888900000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317683006848b823%3A0x18b2fc7a4981d93!2zVGh1w6ogWGUgTcOheSBQaGFuIFRoaeG6v3QgLSDDgW5oIER1!5e1!3m2!1svi!2s!4v1764403956611!5m2!1svi!2s" 
+                                class="w-full h-full"
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Copyright Bar -->
+        <div class="border-t border-gray-800 bg-black">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                <div class="text-center text-gray-400 text-sm">
+                    <p>©2025 <span class="text-lime-500 font-semibold">CÔNG TY TNHH DU LỊCH VẬN TẢI ÁNH DU</span>.
+                        Design by <a href="#"
+                            class="text-lime-500 hover:text-lime-400 transition-colors font-semibold">Vina Software</a>
+                        (VNS)</p>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <script>
+            // Testimonials Carousel
+            let currentTestimonialIndex = 0;
+            const testimonialsTrack = document.querySelector('.testimonials-track');
+            const testimonialSlides = document.querySelectorAll('.testimonial-slide');
+            const totalTestimonials = testimonialSlides.length;
+            let testimonialsPerView = window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1;
+
+            function updateTestimonialsPerView() {
+                testimonialsPerView = window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1;
+            }
+
+            function moveTestimonials(direction) {
+                if (direction === 'next') {
+                    if (currentTestimonialIndex < totalTestimonials - testimonialsPerView) {
+                        currentTestimonialIndex++;
+                    }
+                } else {
+                    if (currentTestimonialIndex > 0) {
+                        currentTestimonialIndex--;
+                    }
+                }
+
+                const slideWidth = testimonialSlides[0].offsetWidth;
+                const offset = -currentTestimonialIndex * slideWidth;
+                testimonialsTrack.style.transform = `translateX(${offset}px)`;
+            }
+
+            document.querySelector('.testimonials-next').addEventListener('click', () => {
+                moveTestimonials('next');
+            });
+
+            document.querySelector('.testimonials-prev').addEventListener('click', () => {
+                moveTestimonials('prev');
+            });
+
+            window.addEventListener('resize', () => {
+                updateTestimonialsPerView();
+                currentTestimonialIndex = 0;
+                testimonialsTrack.style.transform = 'translateX(0)';
+            });
+        </script>
+        <script>
+            // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const closeMobileMenu = document.getElementById('closeMobileMenu');
+
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('open');
+                mobileMenuBtn.classList.toggle('open');
+            });
+
+            closeMobileMenu.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+                mobileMenuBtn.classList.remove('open');
+            });
+
+            // Close mobile menu when clicking on a link
+            const mobileLinks = mobileMenu.querySelectorAll('a');
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('open');
+                    mobileMenuBtn.classList.remove('open');
+                });
+            });
+
+            // Desktop menu active state
+            const menuItems = document.querySelectorAll('.menu-item');
+
+            menuItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    menuItems.forEach(mi => mi.classList.remove('active'));
+                    item.classList.add('active');
+                });
+            });
+
+            // Smooth scroll
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Carousel functionality
+            let currentSlide = 0;
+            const slides = document.querySelectorAll('.carousel-slide');
+            const dots = document.querySelectorAll('.carousel-dot');
+            const totalSlides = slides.length;
+            let autoSlideInterval;
+
+            function showSlide(index) {
+                // Remove active class from all slides and dots
+                slides.forEach(slide => {
+                    slide.classList.remove('active');
+                    slide.classList.add('opacity-0');
+                });
+                dots.forEach(dot => dot.classList.remove('active', 'bg-yellow-500', 'w-8'));
+                dots.forEach(dot => dot.classList.add('bg-white/50'));
+
+                // Add active class to current slide and dot
+                slides[index].classList.add('active');
+                slides[index].classList.remove('opacity-0');
+                dots[index].classList.add('active', 'bg-yellow-500');
+                dots[index].classList.remove('bg-white/50');
+            }
+
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                showSlide(currentSlide);
+            }
+
+            function prevSlide() {
+                currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                showSlide(currentSlide);
+            }
+
+            // Auto slide every 5 seconds
+            function startAutoSlide() {
+                autoSlideInterval = setInterval(nextSlide, 5000);
+            }
+
+            function stopAutoSlide() {
+                clearInterval(autoSlideInterval);
+            }
+
+            // Event listeners for navigation buttons
+            document.querySelector('.carousel-next').addEventListener('click', () => {
+                stopAutoSlide();
+                nextSlide();
+                startAutoSlide();
+            });
+
+            document.querySelector('.carousel-prev').addEventListener('click', () => {
+                stopAutoSlide();
+                prevSlide();
+                startAutoSlide();
+            });
+
+            // Event listeners for dots
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    stopAutoSlide();
+                    currentSlide = index;
+                    showSlide(currentSlide);
+                    startAutoSlide();
+                });
+            });
+
+            // Pause on hover
+            const carouselContainer = document.querySelector('.carousel-container');
+            carouselContainer.addEventListener('mouseenter', stopAutoSlide);
+            carouselContainer.addEventListener('mouseleave', startAutoSlide);
+
+            // Start auto slide
+            startAutoSlide();
+
+            // Destinations Carousel
+            let currentDestinationIndex = 0;
+            const destinationsContainer = document.querySelector('.destinations-container');
+            const destinationCards = document.querySelectorAll('.destination-card');
+            const totalDestinations = destinationCards.length;
+            let cardsPerView = window.innerWidth >= 1024 ? 4 : window.innerWidth >= 768 ? 2 : 1;
+
+            function updateCardsPerView() {
+                cardsPerView = window.innerWidth >= 1024 ? 4 : window.innerWidth >= 768 ? 2 : 1;
+            }
+
+            function moveDestinations(direction) {
+                if (direction === 'next') {
+                    if (currentDestinationIndex < totalDestinations - cardsPerView) {
+                        currentDestinationIndex++;
+                    }
+                } else {
+                    if (currentDestinationIndex > 0) {
+                        currentDestinationIndex--;
+                    }
+                }
+
+                const cardWidth = destinationCards[0].offsetWidth;
+                const offset = -currentDestinationIndex * cardWidth;
+                destinationsContainer.style.transform = `translateX(${offset}px)`;
+            }
+
+            document.querySelector('.destinations-next').addEventListener('click', () => {
+                moveDestinations('next');
+            });
+
+            document.querySelector('.destinations-prev').addEventListener('click', () => {
+                moveDestinations('prev');
+            });
+
+            // Update on resize
+            window.addEventListener('resize', () => {
+                updateCardsPerView();
+                currentDestinationIndex = 0;
+                destinationsContainer.style.transform = 'translateX(0)';
+            });
+        </script>
+</body>
+
+</html>

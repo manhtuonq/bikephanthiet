@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ÁNH DU - Menu Navigation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .menu-item {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .menu-item::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #EAB308;
+            transition: width 0.3s ease;
+        }
+
+        .menu-item:hover::after,
+        .menu-item.active::after {
+            width: 100%;
+        }
+
+        .menu-item:hover {
+            color: #EAB308;
+        }
+
+        .menu-item.active {
+            color: #EAB308;
+        }
+
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+
+        .hamburger span {
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.open span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.open span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeInUp {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .carousel-slide {
+            transition: opacity 700ms ease-in-out;
+        }
+
+        .carousel-dot.active {
+            width: 2rem;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 200%; }
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 30px rgba(234, 179, 8, 0.6); }
+            50% { box-shadow: 0 0 60px rgba(234, 179, 8, 0.9); }
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+        
+        .float-animation {
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .card-hover {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-20px) scale(1.03);
+        }
+        
+        .shine-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .shine-effect::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(234, 179, 8, 0.4), transparent);
+            animation: shine 3s infinite;
+        }
+        
+        .glow-border {
+            animation: glow 2s ease-in-out infinite;
+        }
+        
+        .gradient-gold {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .sparkle {
+            animation: sparkle 2s ease-in-out infinite;
+        }
+        
+        .bike-image {
+            transition: transform 0.5s ease;
+            filter: brightness(1);
+        }
+        
+        .card-hover:hover .bike-image {
+            transform: scale(1.1) rotate(2deg);
+            filter: brightness(1.1);
+        }
+        
+        .premium-badge {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.5);
+        }
+        
+        .glass-effect {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+        
+        .image-item {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        .image-item img {
+            transition: transform 0.5s ease, filter 0.5s ease;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .image-item:hover img {
+            transform: scale(1.15);
+            filter: brightness(0.7);
+        }
+        
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.8));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1.5rem;
+        }
+        
+        .image-item:hover .image-overlay {
+            opacity: 1;
+        }
+        
+        .shimmer-effect {
+            background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 50%, #f59e0b 100%);
+            background-size: 1000px 100%;
+            animation: shimmer 2s infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .badge {
+            backdrop-filter: blur(10px);
+            background: rgba(251, 191, 36, 0.9);
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        .modal-img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(251, 191, 36, 0.5);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+    <!-- Navigation Bar -->
+    <nav class="bg-black text-white sticky top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='none' stroke='%23EAB308' stroke-width='3'/%3E%3Cpath d='M35 50 L45 35 L50 40 L55 30 L60 45 L65 40' fill='none' stroke='%23EAB308' stroke-width='2'/%3E%3Ccircle cx='45' cy='60' r='8' fill='none' stroke='%23EAB308' stroke-width='2'/%3E%3Ccircle cx='65' cy='65' r='10' fill='none' stroke='%23EAB308' stroke-width='2'/%3E%3C/svg%3E"
+                        alt="ÁNH DU Logo" class="h-12 w-12">
+                    <span class="text-2xl font-bold text-yellow-500">ÁNH DU</span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center space-x-8">
+                    <a href="/" class="menu-item text-sm font-semibold text-yellow-500 active">Thuê xe
+                        máy</a>
+                    <a href="dia-diem.html" class="menu-item text-sm font-semibold text-white">Tour xe máy</a>
+                    <a href="bang-gia.html" class="menu-item text-sm font-semibold text-white">Bảng giá</a>
+                    <a href="ve-chung-toi.html" class="menu-item text-sm font-semibold text-white">Về chúng tôi</a>
+                    <a href="form.html" class="menu-item text-sm font-semibold text-white">Liên hệ</a>
+                </div>
+
+                <!-- Language Selector -->
+                <div class="hidden lg:flex items-center">
+                    <button
+                        class="px-4 py-2 border-2 border-yellow-500 text-yellow-500 rounded-md font-semibold hover:bg-yellow-500 hover:text-black transition-colors duration-300">
+                        VN
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button class="lg:hidden hamburger flex flex-col space-y-1.5" id="mobileMenuBtn">
+                    <span class="block w-6 h-0.5 bg-yellow-500"></span>
+                    <span class="block w-6 h-0.5 bg-yellow-500"></span>
+                    <span class="block w-6 h-0.5 bg-yellow-500"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu fixed top-0 left-0 w-64 h-full bg-black shadow-2xl lg:hidden z-50" id="mobileMenu">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-8">
+                    <span class="text-xl font-bold text-yellow-500">ÁNH DU</span>
+                    <button class="text-white" id="closeMobileMenu">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex flex-col space-y-4">
+                    <a href="#thue-xe-may" class="text-yellow-500 font-semibold py-2 border-b border-gray-800">Thuê xe
+                        máy</a>
+                    <a href="#tour-xe-may"
+                        class="text-white font-semibold py-2 border-b border-gray-800 hover:text-yellow-500 transition-colors">Tour
+                        xe máy</a>
+                    <a href="#bang-gia"
+                        class="text-white font-semibold py-2 border-b border-gray-800 hover:text-yellow-500 transition-colors">Bảng
+                        giá</a>
+                    <a href="#ve-chung-toi"
+                        class="text-white font-semibold py-2 border-b border-gray-800 hover:text-yellow-500 transition-colors">Về
+                        chúng tôi</a>
+                    <a href="#lien-he"
+                        class="text-white font-semibold py-2 border-b border-gray-800 hover:text-yellow-500 transition-colors">Liên
+                        hệ</a>
+                    <a href="#blog-du-lich"
+                        class="text-white font-semibold py-2 border-b border-gray-800 hover:text-yellow-500 transition-colors">Blog
+                        du lịch</a>
+                    <button
+                        class="mt-4 px-4 py-2 border-2 border-yellow-500 text-yellow-500 rounded-md font-semibold hover:bg-yellow-500 hover:text-black transition-colors">
+                        VN
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-6xl font-bold mb-4 shimmer-effect">Album Xe Máy Premium</h1>
+            <p class="text-gray-400 text-lg mb-6">
+                <i class="fas fa-camera text-yellow-500 mr-2"></i>
+                Bộ sưu tập xe đẳng cấp - Click để xem chi tiết
+            </p>
+        </div>
+
+        <!-- Gallery Grid -->
+        <div class="grid grid-cols-12 gap-4 auto-rows-[200px]">
+            <!-- Large Image 1 -->
+            <div class="image-item col-span-12 md:col-span-6 row-span-2 rounded-2xl border-2 border-yellow-600" data-category="honda premium">
+                <img src="image/1.jpg" alt="Honda SH Mode">
+                <div class="image-overlay">
+                    <div class="badge inline-block px-3 py-1 rounded-full text-black text-xs font-bold mb-2 w-fit">
+                        <i class="fas fa-crown mr-1"></i>PREMIUM
+                    </div>
+                    <h3 class="text-white text-2xl font-bold mb-1">Honda SH Mode 2024</h3>
+                    <p class="text-gray-300 text-sm">
+                        <i class="fas fa-star text-yellow-500 mr-1"></i>Sang trọng - Tiết kiệm
+                    </p>
+                </div>
+            </div>
+
+            <!-- Medium Images -->
+            <div class="image-item col-span-6 md:col-span-3 row-span-1 rounded-2xl border-2 border-yellow-600" data-category="honda">
+                <img src="image/2.jpg" alt="Honda Air Blade">
+                <div class="image-overlay">
+                    <h3 class="text-white text-lg font-bold">Honda Air Blade</h3>
+                    <p class="text-gray-300 text-xs">150K/ngày</p>
+                </div>
+            </div>
+
+            <div class="image-item col-span-6 md:col-span-3 row-span-1 rounded-2xl border-2 border-yellow-600" data-category="honda">
+                <img src="image/3.jpg" alt="Honda Vision">
+                <div class="image-overlay">
+                    <h3 class="text-white text-lg font-bold">Honda Vision</h3>
+                    <p class="text-gray-300 text-xs">150K/ngày</p>
+                </div>
+            </div>
+
+            <div class="image-item col-span-6 md:col-span-3 row-span-2 rounded-2xl border-2 border-yellow-600" data-category="yamaha premium">
+                <img src="image/4.jpg" alt="Yamaha NVX">
+                <div class="image-overlay">
+                    <div class="badge inline-block px-3 py-1 rounded-full text-black text-xs font-bold mb-2 w-fit">
+                        <i class="fas fa-fire mr-1"></i>HOT
+                    </div>
+                    <h3 class="text-white text-xl font-bold mb-1">Yamaha NVX 155</h3>
+                    <p class="text-gray-300 text-sm">Thể thao - Mạnh mẽ</p>
+                </div>
+            </div>
+
+            <div class="image-item col-span-6 md:col-span-3 row-span-1 rounded-2xl border-2 border-yellow-600" data-category="yamaha">
+                <img src="image/5.jpg" alt="Yamaha Janus">
+                <div class="image-overlay">
+                    <h3 class="text-white text-lg font-bold">Yamaha Janus</h3>
+                    <p class="text-gray-300 text-xs">140K/ngày</p>
+                </div>
+            </div>
+
+            <!-- Wide Image -->
+            <div class="image-item col-span-12 md:col-span-6 row-span-1 rounded-2xl border-2 border-yellow-600" data-category="honda premium">
+                <img src="image/6.jpg" alt="Honda PCX">
+                <div class="image-overlay">
+                    <div class="badge inline-block px-3 py-1 rounded-full text-black text-xs font-bold mb-2 w-fit">
+                        <i class="fas fa-gem mr-1"></i>VIP
+                    </div>
+                    <h3 class="text-white text-xl font-bold mb-1">Honda PCX 160</h3>
+                    <p class="text-gray-300 text-sm">
+                        <i class="fas fa-check-circle text-yellow-500 mr-1"></i>Cao cấp nhất
+                    </p>
+                </div>
+            </div>
+
+            <div class="image-item col-span-6 md:col-span-3 row-span-1 rounded-2xl border-2 border-yellow-600" data-category="yamaha">
+                <img src="image/7.jpg" alt="Yamaha Exciter">
+                <div class="image-overlay">
+                    <h3 class="text-white text-lg font-bold">Yamaha Exciter</h3>
+                    <p class="text-gray-300 text-xs">180K/ngày</p>
+                </div>
+            </div>
+
+            <div class="image-item col-span-6 md:col-span-3 row-span-1 rounded-2xl border-2 border-yellow-600" data-category="honda">
+                <img src="image/8.jpg" alt="Honda Wave">
+                <div class="image-overlay">
+                    <h3 class="text-white text-lg font-bold">Honda Wave</h3>
+                    <p class="text-gray-300 text-xs">100K/ngày</p>
+                </div>
+            </div>
+
+            <div class="image-item col-span-12 md:col-span-4 row-span-1 rounded-2xl border-2 border-yellow-600" data-category="yamaha">
+                <img src="image/9.jpg" alt="Yamaha Sirius">
+                <div class="image-overlay">
+                    <h3 class="text-white text-lg font-bold">Yamaha Sirius</h3>
+                    <p class="text-gray-300 text-xs">120K/ngày</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px;" class="image-item col-span-12 md:col-span-4 row-span-1 rounded-2xl border-2 border-yellow-600 " data-category="honda premium">
+                <img src="image/10.jpg" alt="Honda Lead">
+                <div class="image-overlay">
+                    <h3 class="text-white text-lg font-bold">Honda Lead 125</h3>
+                    <p class="text-gray-300 text-xs">160K/ngày</p>
+                </div>
+            </div>
+
+           
+        </div>
+
+       
+    </div>
+   
+
+    <!-- Footer -->
+    <footer class="bg-black border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+                <!-- Company Info -->
+                <div>
+                    <!-- Logo -->
+                    <div class="flex items-center space-x-3 mb-6">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='none' stroke='%23EAB308' stroke-width='3'/%3E%3Cpath d='M35 50 L45 35 L50 40 L55 30 L60 45 L65 40' fill='none' stroke='%23EAB308' stroke-width='2'/%3E%3Ccircle cx='45' cy='60' r='8' fill='none' stroke='%23EAB308' stroke-width='2'/%3E%3Ccircle cx='65' cy='65' r='10' fill='none' stroke='%23EAB308' stroke-width='2'/%3E%3C/svg%3E"
+                            alt="ÁNH DU Logo" class="h-16 w-16">
+                        <span class="text-2xl font-bold text-lime-500">ÁNH DU</span>
+                    </div>
+                    <p class="text-gray-400 leading-relaxed mb-6">
+                        Ánh Du là dịch vụ cho thuê xe máy tự lái chuyên nghiệp tại Việt Nam
+                    </p>
+                    <!-- Social Media -->
+                    <div class="flex space-x-4">
+                        <a href="#"
+                            class="w-10 h-10 bg-gray-800 hover:bg-lime-500 rounded-full flex items-center justify-center transition-colors group">
+                            <svg class="w-5 h-5 text-gray-400 group-hover:text-black" fill="currentColor"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                            </svg>
+                        </a>
+                        <a href="#"
+                            class="w-10 h-10 bg-gray-800 hover:bg-lime-500 rounded-full flex items-center justify-center transition-colors group">
+                            <svg class="w-5 h-5 text-gray-400 group-hover:text-black" fill="currentColor"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                            </svg>
+                        </a>
+                        <a href="#"
+                            class="w-10 h-10 bg-gray-800 hover:bg-lime-500 rounded-full flex items-center justify-center transition-colors group">
+                            <svg class="w-5 h-5 text-gray-400 group-hover:text-black" fill="currentColor"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
+                            </svg>
+                        </a>
+                        <a href="#"
+                            class="w-10 h-10 bg-gray-800 hover:bg-lime-500 rounded-full flex items-center justify-center transition-colors group">
+                            <svg class="w-5 h-5 text-gray-400 group-hover:text-black" fill="currentColor"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Liên Hệ -->
+                <div>
+                    <h3 class="text-lime-500 font-bold text-lg mb-6">LIÊN HỆ</h3>
+                    <ul class="space-y-4">
+                        <li>
+                            <p class="text-gray-400 text-sm font-semibold mb-2">CS1:</p>
+                            <p class="text-gray-300 text-sm">15 Nguyễn đình chiểu. P Hàm tiến. Tp phan thiết . Bình
+                                thuận</p>
+                        </li>
+                        <li>
+                            <p class="text-gray-400 text-sm font-semibold mb-2">CS2:</p>
+                            <p class="text-gray-300 text-sm">39ab hùng vương .P Phú hài . Tp Phan thiết. Bình thuận</p>
+                        </li>
+                        <li>
+                            <p class="text-gray-400 text-sm font-semibold mb-2">Sđt:</p>
+                            <a href="tel:0964646417" class="text-lime-500 hover:text-lime-400 transition-colors">096 464
+                                6417</a>
+                        </li>
+                        <li>
+                            <p class="text-gray-400 text-sm font-semibold mb-2">Mail:</p>
+                            <a href="mailto:anhdu@gmail.com"
+                                class="text-lime-500 hover:text-lime-400 transition-colors">anhdu@gmail.com</a>
+                        </li>
+                        <li>
+                            <p class="text-gray-400 text-sm font-semibold mb-2">Mở cửa:</p>
+                            <p class="text-gray-300 text-sm">07:00 - 22:00</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Chính Sách -->
+                <div>
+                    <h3 class="text-lime-500 font-bold text-lg mb-6">CHÍNH SÁCH</h3>
+                    <ul class="space-y-3">
+                        <li>
+                            <a href="#"
+                                class="text-gray-300 hover:text-lime-500 transition-colors flex items-center group">
+                                <svg class="w-4 h-4 mr-2 text-lime-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                Chính sách bảo mật
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#"
+                                class="text-gray-300 hover:text-lime-500 transition-colors flex items-center group">
+                                <svg class="w-4 h-4 mr-2 text-lime-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                Chính sách thuê xe
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#"
+                                class="text-gray-300 hover:text-lime-500 transition-colors flex items-center group">
+                                <svg class="w-4 h-4 mr-2 text-lime-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                Chính sách giao nhận xe
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#"
+                                class="text-gray-300 hover:text-lime-500 transition-colors flex items-center group">
+                                <svg class="w-4 h-4 mr-2 text-lime-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                Chính sách hủy & hoàn tiền
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#"
+                                class="text-gray-300 hover:text-lime-500 transition-colors flex items-center group">
+                                <svg class="w-4 h-4 mr-2 text-lime-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                Điều khoản sử dụng
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Google Map -->
+                <div>
+                    <h3 class="text-lime-500 font-bold text-lg mb-6">GOOGLE MAP</h3>
+                    <div class="space-y-4">
+                        <button
+                            class="w-full px-4 py-2 bg-lime-500 hover:bg-lime-400 text-black font-semibold rounded-lg transition-colors">
+                            Cơ sở 1
+                        </button>
+                        <button
+                            class="w-full px-4 py-2 border-2 border-lime-500 text-lime-500 hover:bg-lime-500 hover:text-black font-semibold rounded-lg transition-colors">
+                            Cơ sở 2
+                        </button>
+                        <!-- Map Preview -->
+                        <div class="relative h-48 rounded-lg overflow-hidden border-2 border-gray-800">
+                            <iframe 
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63329.64209763287!2d108.04449404863277!3d10.940888900000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317683006848b823%3A0x18b2fc7a4981d93!2zVGh1w6ogWGUgTcOheSBQaGFuIFRoaeG6v3QgLSDDgW5oIER1!5e1!3m2!1svi!2s!4v1764403956611!5m2!1svi!2s" 
+                                class="w-full h-full"
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Copyright Bar -->
+        <div class="border-t border-gray-800 bg-black">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                <div class="text-center text-gray-400 text-sm">
+                    <p>©2025 <span class="text-lime-500 font-semibold">CÔNG TY TNHH DU LỊCH VẬN TẢI ÁNH DU</span>.
+                        Design by <a href="#"
+                            class="text-lime-500 hover:text-lime-400 transition-colors font-semibold">Vina Software</a>
+                        (VNS)</p>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <script>
+            // Testimonials Carousel
+            let currentTestimonialIndex = 0;
+            const testimonialsTrack = document.querySelector('.testimonials-track');
+            const testimonialSlides = document.querySelectorAll('.testimonial-slide');
+            const totalTestimonials = testimonialSlides.length;
+            let testimonialsPerView = window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1;
+
+            function updateTestimonialsPerView() {
+                testimonialsPerView = window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1;
+            }
+
+            function moveTestimonials(direction) {
+                if (direction === 'next') {
+                    if (currentTestimonialIndex < totalTestimonials - testimonialsPerView) {
+                        currentTestimonialIndex++;
+                    }
+                } else {
+                    if (currentTestimonialIndex > 0) {
+                        currentTestimonialIndex--;
+                    }
+                }
+
+                const slideWidth = testimonialSlides[0].offsetWidth;
+                const offset = -currentTestimonialIndex * slideWidth;
+                testimonialsTrack.style.transform = `translateX(${offset}px)`;
+            }
+
+            document.querySelector('.testimonials-next').addEventListener('click', () => {
+                moveTestimonials('next');
+            });
+
+            document.querySelector('.testimonials-prev').addEventListener('click', () => {
+                moveTestimonials('prev');
+            });
+
+            window.addEventListener('resize', () => {
+                updateTestimonialsPerView();
+                currentTestimonialIndex = 0;
+                testimonialsTrack.style.transform = 'translateX(0)';
+            });
+        </script>
+        <script>
+            // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const closeMobileMenu = document.getElementById('closeMobileMenu');
+
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('open');
+                mobileMenuBtn.classList.toggle('open');
+            });
+
+            closeMobileMenu.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+                mobileMenuBtn.classList.remove('open');
+            });
+
+            // Close mobile menu when clicking on a link
+            const mobileLinks = mobileMenu.querySelectorAll('a');
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('open');
+                    mobileMenuBtn.classList.remove('open');
+                });
+            });
+
+            // Desktop menu active state
+            const menuItems = document.querySelectorAll('.menu-item');
+
+            menuItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    menuItems.forEach(mi => mi.classList.remove('active'));
+                    item.classList.add('active');
+                });
+            });
+
+            // Smooth scroll
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Carousel functionality
+            let currentSlide = 0;
+            const slides = document.querySelectorAll('.carousel-slide');
+            const dots = document.querySelectorAll('.carousel-dot');
+            const totalSlides = slides.length;
+            let autoSlideInterval;
+
+            function showSlide(index) {
+                // Remove active class from all slides and dots
+                slides.forEach(slide => {
+                    slide.classList.remove('active');
+                    slide.classList.add('opacity-0');
+                });
+                dots.forEach(dot => dot.classList.remove('active', 'bg-yellow-500', 'w-8'));
+                dots.forEach(dot => dot.classList.add('bg-white/50'));
+
+                // Add active class to current slide and dot
+                slides[index].classList.add('active');
+                slides[index].classList.remove('opacity-0');
+                dots[index].classList.add('active', 'bg-yellow-500');
+                dots[index].classList.remove('bg-white/50');
+            }
+
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                showSlide(currentSlide);
+            }
+
+            function prevSlide() {
+                currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                showSlide(currentSlide);
+            }
+
+            // Auto slide every 5 seconds
+            function startAutoSlide() {
+                autoSlideInterval = setInterval(nextSlide, 5000);
+            }
+
+            function stopAutoSlide() {
+                clearInterval(autoSlideInterval);
+            }
+
+            // Event listeners for navigation buttons
+            document.querySelector('.carousel-next').addEventListener('click', () => {
+                stopAutoSlide();
+                nextSlide();
+                startAutoSlide();
+            });
+
+            document.querySelector('.carousel-prev').addEventListener('click', () => {
+                stopAutoSlide();
+                prevSlide();
+                startAutoSlide();
+            });
+
+            // Event listeners for dots
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    stopAutoSlide();
+                    currentSlide = index;
+                    showSlide(currentSlide);
+                    startAutoSlide();
+                });
+            });
+
+            // Pause on hover
+            const carouselContainer = document.querySelector('.carousel-container');
+            carouselContainer.addEventListener('mouseenter', stopAutoSlide);
+            carouselContainer.addEventListener('mouseleave', startAutoSlide);
+
+            // Start auto slide
+            startAutoSlide();
+
+            // Destinations Carousel
+            let currentDestinationIndex = 0;
+            const destinationsContainer = document.querySelector('.destinations-container');
+            const destinationCards = document.querySelectorAll('.destination-card');
+            const totalDestinations = destinationCards.length;
+            let cardsPerView = window.innerWidth >= 1024 ? 4 : window.innerWidth >= 768 ? 2 : 1;
+
+            function updateCardsPerView() {
+                cardsPerView = window.innerWidth >= 1024 ? 4 : window.innerWidth >= 768 ? 2 : 1;
+            }
+
+            function moveDestinations(direction) {
+                if (direction === 'next') {
+                    if (currentDestinationIndex < totalDestinations - cardsPerView) {
+                        currentDestinationIndex++;
+                    }
+                } else {
+                    if (currentDestinationIndex > 0) {
+                        currentDestinationIndex--;
+                    }
+                }
+
+                const cardWidth = destinationCards[0].offsetWidth;
+                const offset = -currentDestinationIndex * cardWidth;
+                destinationsContainer.style.transform = `translateX(${offset}px)`;
+            }
+
+            document.querySelector('.destinations-next').addEventListener('click', () => {
+                moveDestinations('next');
+            });
+
+            document.querySelector('.destinations-prev').addEventListener('click', () => {
+                moveDestinations('prev');
+            });
+
+            // Update on resize
+            window.addEventListener('resize', () => {
+                updateCardsPerView();
+                currentDestinationIndex = 0;
+                destinationsContainer.style.transform = 'translateX(0)';
+            });
+        </script>
+</body>
+
+</html>
